@@ -1,3 +1,7 @@
+import slider1 from '../assets/image/slider-1.jpg';
+import slider2 from '../assets/image/slider-2.jpg';
+import slider3 from '../assets/image/slider-3.jpg';
+
 const sliderData = [
     {
       imgUrl: slider1,
