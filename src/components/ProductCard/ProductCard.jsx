@@ -3,21 +3,48 @@ import { useNavigate } from 'react-router-dom';
 // import { useCartContext } from '../../context/Cart/CartContext';
 // import { IProducts } from '../../types/productsType';
 import './ProductCard.css';
+import { useEffect, useState } from 'react';
 
 const ProductCard = ({ productData }) => {
     //   const { addToCart } = useCartContext();
     const navigate = useNavigate();
     const discountPrice = (productData.price - (productData.price * productData.discountPercent) / 100).toFixed(2);
-
+    const [cartData, setCartData] = useState()
     const handleOpenProduct = () => {
         navigate(`/shop/${productData.id}`);
     };
+    const products = []
 
-    //   const handleAddToCart = (e) => {
-    //     e.stopPropagation();
-    //     addToCart(productData, 1);
-    //   };
 
+
+    const handleAddToCart = (e) => {
+        e.stopPropagation();
+        const storedData = localStorage.getItem('products');
+        const existingProducts = storedData ? JSON.parse(storedData) : [];
+
+        // Check if the product already exists in the cart based on some unique identifier (e.g., product ID)
+        const productExists = existingProducts.some((item) => item.id === productData.id);
+
+        // If the product does not exist in the cart, add it
+        if (!productExists) {
+            // Clone the productData to avoid modifying the original data
+            const productToAdd = { ...productData };
+            // Add the product to the existing products array
+            existingProducts.push(productToAdd);
+
+            // Store the updated products array in localStorage
+            localStorage.setItem('products', JSON.stringify(existingProducts));
+        } else {
+            alert('Product is already in cart!');
+        }
+    }
+
+    // useEffect(() => {
+    //     setLoading(true);
+    //     setTimeout(() => {
+    //         setLoading(false);
+    //     }, 2000);
+    // },[])
     return (
         <div onClick={handleOpenProduct} className='product-card'>
             {productData.discountPercent > 0 && (
@@ -45,7 +72,7 @@ const ProductCard = ({ productData }) => {
                     alt={productData.name}
                 />
                 {/* <button disabled={!productData.inStock} onClick={handleAddToCart} className='add-to-cart'> */}
-                <button disabled={!productData.inStock} className='add-to-cart'>
+                <button disabled={!productData.inStock} onClick={handleAddToCart} className='add-to-cart'>
                     <h2>{productData.inStock ? 'ADD TO CART' : 'OUT OF STOCK'}</h2>
                 </button>
             </div>

@@ -10,6 +10,7 @@ const ShopCart = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { pathname } = useLocation();
   const [addAnimation, setAddAnimation] = useState(false);
+  const [total , setTotal] = useState(0)
   const navigate = useNavigate();
 
   const cart = 0;
@@ -19,8 +20,15 @@ const ShopCart = () => {
       setAddAnimation(false);
     }, 1000);
   }, [cart]);
+let totalPrice = 0
+  useEffect(() => {
+    const storedData = localStorage.getItem('products');
+    const existingProducts = JSON.parse(storedData)
 
-
+   for (let i = 0; i < existingProducts.length; i++) {
+      totalPrice = totalPrice + existingProducts[i]
+   }
+  }, []);
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
@@ -34,7 +42,7 @@ const ShopCart = () => {
           </span>
           <MdOutlineShoppingBag className='cart-icon' />
         </div>
-        <span className='cart-price'>434 $</span>
+        <span className='cart-price'>{totalPrice} $</span>
       </div>
       <div className={`cart-wrapper ${isOpen ? 'open' : ''}`}>
         <div className='cart-wrapper__header'>

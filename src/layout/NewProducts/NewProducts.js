@@ -30,6 +30,13 @@ const NewProduct = () => {
     //       setLoading(false);
     //     })();
     //   }, []);
+    useEffect(() => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
+
+    },[])
     console.log(products)
     return (
         <div className='new-product'>
